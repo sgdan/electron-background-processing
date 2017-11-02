@@ -1,0 +1,10 @@
+{
+  "name": "electron-background-processing",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^1.7.9"
+  },
+  "devDependencies": {
+    "electron": "^1.7.9"
+  }
+}

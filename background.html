@@ -1,0 +1,26 @@
+<h1>Background</h1>
+
+<script type="text/javascript">
+	const {ipcRenderer} = require('electron');
+	ipcRenderer.send('to-main', 'starting up ' + process.pid);
+
+	// if something is received, pass it to the renderer via the main thread
+	ipcRenderer.on('to-background', (event, arg) => {
+		ipcRenderer.send('for-renderer', 'from ' + process.pid + ': ' + arg);
+	});
+
+	ipcRenderer.on('bg-processing', (event, arg) => {
+		ipcRenderer.send('to-main', 'processing started on ' + process.pid);
+
+		// see https://gist.github.com/tkrueger/3500612 for generating load
+		var start = new Date().getTime()
+		var result = 0
+		var finished = false
+		while(!finished) {
+			result += Math.random() * Math.random()
+			finished = new Date().getTime() > start + 10000
+		}
+
+		ipcRenderer.send('to-main', 'processing finished on ' + process.pid);
+	})
+</script>

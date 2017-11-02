@@ -1,0 +1,30 @@
+<h1>Renderer</h1>
+
+<input id='msg' type='textfield' value='a message'/><br>
+
+<button onclick="toMain()">Send to main thread</button><br>
+
+<button onclick="toBg()">Send to bg thread</button>
+Received: <label id='received'>-</label><br><br>
+
+<button onclick="bgProcessing()">Request background processing for 10s</button><br>
+
+<script type="text/javascript">
+	const {ipcRenderer} = require('electron')
+	
+	function toMain() {
+		ipcRenderer.send('to-main', 'from renderer: ' + document.getElementById('msg').value)
+	}
+
+	function toBg() {
+		ipcRenderer.send('for-background', 'from renderer: ' + document.getElementById('msg').value)
+	}
+
+	function bgProcessing() {
+		ipcRenderer.send('bg-processing', '')
+	}
+
+	ipcRenderer.on('to-renderer', (event, arg) => {
+		document.getElementById('received').innerHTML = arg
+	})
+</script>
