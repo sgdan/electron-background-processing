@@ -1,15 +1,24 @@
-<h1>Renderer</h1>
+<h2>Background Threads</h2>
 
 Msg: <input id='msg' type='textfield' value='a message'/><br>
 <button onclick="toMain()">Send to main thread</button><br>
 <button onclick="toBg()">Send to bg thread</button>
-<label id='received'></label><br><br>
+<label id='received'></label>
+<br><br>
 
 Task: <input id='task' type='textfield' value='a task'/><br>
-<button onclick="assignTask()">Assign task to bg thread</button>
+<button onclick="assignTask()">Do background work</button>
+<br><br>
+
+<label id='threads'>0</label> background threads available<br>
+<label id='tasks'>0</label> tasks queued
 
 <script type="text/javascript">
 	const {ipcRenderer} = require('electron')
+
+	function setVal(id, value) {
+		document.getElementById(id).innerHTML = value
+	}
 	
 	function toMain() {
 		ipcRenderer.send('to-main', document.getElementById('msg').value)
@@ -24,6 +33,11 @@ Task: <input id='task' type='textfield' value='a task'/><br>
 	}
 
 	ipcRenderer.on('to-renderer', (event, arg) => {
-		document.getElementById('received').innerHTML = arg
+		setVal('received', arg)
+	})
+
+	ipcRenderer.on('status', (event, threads, tasks) => {
+		setVal('threads', threads)
+		setVal('tasks', tasks)
 	})
 </script>

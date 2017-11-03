@@ -21,16 +21,12 @@ electron .
 
 # Instructions
 
-- After starting up on the command line you should see the background threads starting:
+- After starting up on the command line you should see the number of cpus:
 ```
 $ electron .
 
 cpus: 4
-to-main: starting up 12836
-to-main: starting up 9196
-to-main: starting up 9436
-to-main: starting up 15556
 ```
-- Use the "Send to main thread" button and you should see a message from the UI printed on the command line
+- Use the "Send to main thread" button and you should see a message from the UI printed on the command line.
 - The "Send to bg thread" button triggers a message from the UI to the main thread which passese it to one of the background threads. That background thread should respond back to the main thread which passes it to the UI. You should see the response next to the button.
-- You can also "Request background processing for 10s". If you click it multiple times you should see your computer CPU rise to 100% usage. However, the UI should remain responsive available. Further actions will be queued until they can be handled
+- You can also "Do background work". If you click it multiple times you should see your computer CPU rise to 100% usage. However, the UI should remain responsive. Further actions will be queued until they can be handled.
