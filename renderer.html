@@ -1,27 +1,26 @@
 <h1>Renderer</h1>
 
-<input id='msg' type='textfield' value='a message'/><br>
-
+Msg: <input id='msg' type='textfield' value='a message'/><br>
 <button onclick="toMain()">Send to main thread</button><br>
-
 <button onclick="toBg()">Send to bg thread</button>
-Received: <label id='received'>-</label><br><br>
+<label id='received'></label><br><br>
 
-<button onclick="bgProcessing()">Request background processing for 10s</button><br>
+Task: <input id='task' type='textfield' value='a task'/><br>
+<button onclick="assignTask()">Assign task to bg thread</button>
 
 <script type="text/javascript">
 	const {ipcRenderer} = require('electron')
 	
 	function toMain() {
-		ipcRenderer.send('to-main', 'from renderer: ' + document.getElementById('msg').value)
+		ipcRenderer.send('to-main', document.getElementById('msg').value)
 	}
 
 	function toBg() {
-		ipcRenderer.send('for-background', 'from renderer: ' + document.getElementById('msg').value)
+		ipcRenderer.send('for-background', document.getElementById('msg').value)
 	}
 
-	function bgProcessing() {
-		ipcRenderer.send('bg-processing', '')
+	function assignTask() {
+		ipcRenderer.send('assign-task', document.getElementById('task').value)
 	}
 
 	ipcRenderer.on('to-renderer', (event, arg) => {
