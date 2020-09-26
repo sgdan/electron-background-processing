@@ -30,6 +30,8 @@ $ electron .
 cpus: 4
 ```
 
-- Use the "Send to main thread" button and you should see a message from the UI printed on the command line.
-- The "Send to bg thread" button triggers a message from the UI to the main thread which passese it to one of the background threads. That background thread should respond back to the main thread which passes it to the UI. You should see the response next to the button.
-- You can also "Do background work". If you click it multiple times you should see your computer CPU rise to 100% usage. However, the UI should remain responsive. Further actions will be queued until they can be handled.
+Use the **Send to main thread** button and you should see a message from the UI printed on the command line.
+
+The **Send to bg thread** button triggers a message from the UI to the main thread which passes it to one of the background threads. That background thread should respond back to the main thread which passes it to the UI. You should see the response immediately next to the button if a background thread was available.
+
+You can also **Do background work**. If you click it multiple times you should see your computer CPU rise to 100% usage. However, the UI should remain responsive. Further actions will be queued until they can be handled.
