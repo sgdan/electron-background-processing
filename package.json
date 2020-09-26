@@ -2,7 +2,7 @@
   "name": "electron-background-processing",
   "main": "main.js",
   "dependencies": {
-    "electron": "^1.8.8"
+    "electron": "^7.2.4"
   },
   "scripts": {
     "start": "electron ."
