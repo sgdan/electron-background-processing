@@ -1,4 +1,5 @@
-const {ipcMain, BrowserWindow, app} = require('electron')
+const { ipcMain, BrowserWindow, app } = require('electron')
+app.allowRendererProcessReuse = true
 const cpus = require('os').cpus().length;
 console.log('cpus: ' + cpus);
 
@@ -19,7 +20,12 @@ function doIt() {
 
 // Create a hidden background window
 function createBgWindow() {
-  result = new BrowserWindow({"show": false})
+  result = new BrowserWindow({
+    "show": false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
   result.loadURL('file://' + __dirname + '/background.html')
   result.on('closed', () => {
     console.log('background window closed')
@@ -27,9 +33,15 @@ function createBgWindow() {
   return result
 }
 
-app.on('ready', function() {
+app.whenReady().then(function () {
   // Create the "renderer" window which contains the visible UI
-  renderer = new BrowserWindow({"width": 500, "height": 400})
+  renderer = new BrowserWindow({
+    "width": 500,
+    "height": 400,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
   renderer.loadURL('file://' + __dirname + '/renderer.html')
   renderer.show()
   renderer.on('closed', () => {
@@ -39,7 +51,7 @@ app.on('ready', function() {
 
   // create background thread for each cpu
   for (var i = 0; i < cpus; i++) createBgWindow()
-  
+
   // Main thread can receive directly from windows
   ipcMain.on('to-main', (event, arg) => {
     console.log(arg)

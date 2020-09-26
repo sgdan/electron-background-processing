@@ -1,43 +1,58 @@
-<h2>Background Threads</h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+    <script type="text/javascript">
+      const { ipcRenderer } = require("electron");
 
-Msg: <input id='msg' type='textfield' value='a message'/><br>
-<button onclick="toMain()">Send to main thread</button><br>
-<button onclick="toBg()">Send to bg thread</button>
-<label id='received'></label>
-<br><br>
+      function setVal(id, value) {
+        document.getElementById(id).innerHTML = value;
+      }
 
-Task: <input id='task' type='textfield' value='a task'/><br>
-<button onclick="assignTask()">Do background work</button>
-<br><br>
+      function toMain() {
+        ipcRenderer.send("to-main", document.getElementById("msg").value);
+      }
 
-<label id='threads'>0</label> background threads available<br>
-<label id='tasks'>0</label> tasks queued
+      function toBg() {
+        ipcRenderer.send(
+          "for-background",
+          document.getElementById("msg").value
+        );
+      }
 
-<script type="text/javascript">
-	const {ipcRenderer} = require('electron')
+      function assignTask() {
+        ipcRenderer.send("assign-task", document.getElementById("task").value);
+      }
 
-	function setVal(id, value) {
-		document.getElementById(id).innerHTML = value
-	}
-	
-	function toMain() {
-		ipcRenderer.send('to-main', document.getElementById('msg').value)
-	}
+      ipcRenderer.on("to-renderer", (event, arg) => {
+        setVal("received", arg);
+      });
 
-	function toBg() {
-		ipcRenderer.send('for-background', document.getElementById('msg').value)
-	}
+      ipcRenderer.on("status", (event, threads, tasks) => {
+        setVal("threads", threads);
+        setVal("tasks", tasks);
+      });
+    </script>
+  </head>
+  <body>
+    <h2>Background Threads</h2>
 
-	function assignTask() {
-		ipcRenderer.send('assign-task', document.getElementById('task').value)
-	}
+    Msg: <input id="msg" type="textfield" value="a message" /><br />
+    <button onclick="toMain()">Send to main thread</button><br />
+    <button onclick="toBg()">Send to bg thread</button>
+    <label id="received"></label>
+    <br /><br />
 
-	ipcRenderer.on('to-renderer', (event, arg) => {
-		setVal('received', arg)
-	})
+    Task: <input id="task" type="textfield" value="a task" /><br />
+    <button onclick="assignTask()">Do background work</button>
+    <br /><br />
 
-	ipcRenderer.on('status', (event, threads, tasks) => {
-		setVal('threads', threads)
-		setVal('tasks', tasks)
-	})
-</script>
+    <label id="threads">0</label> background threads available<br />
+    <label id="tasks">0</label> tasks queued
+  </body>
+</html>
