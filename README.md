@@ -1,5 +1,9 @@
 # electron-background-processing
 
+Update Oct 2021: Now using context isolation for renderer and background
+threads, see [Enable Context Isolation...](https://www.electronjs.org/docs/latest/tutorial/security#3-enable-context-isolation-for-remote-content)
+and [Context Isolation](https://www.electronjs.org/docs/latest/tutorial/context-isolation).
+
 Demo of background processing using Electron
 
 - Pool of background threads to match processors using hidden BrowserWindow instances
