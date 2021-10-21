@@ -1,16 +1,14 @@
 <h1>Background</h1>
 
 <script type="text/javascript">
-  const { ipcRenderer } = require("electron");
-
   // Send logs as messages to the main thread to show on the console
   function log(value) {
-    ipcRenderer.send("to-main", process.pid + ": " + value);
+    window.api.log(value);
   }
 
   // let the main thread know this thread is ready to process something
   function ready() {
-    ipcRenderer.send("ready");
+    window.api.ready();
   }
 
   // do some work that will tie up the processor for a while
@@ -26,16 +24,16 @@
   }
 
   // if message is received, pass it back to the renderer via the main thread
-  ipcRenderer.on("message", (event, arg) => {
-    log("received " + arg);
-    ipcRenderer.send("for-renderer", process.pid + ": reply to " + arg);
+  window.api.message((arg) => {
+    log("received: " + arg);
+    window.api.forRenderer(arg);
     ready();
   });
 
-  ipcRenderer.on("task", (event, arg) => {
-    log("starting " + arg);
+  window.api.task((arg) => {
+    log("starting: " + arg);
     work();
-    log("finished " + arg);
+    log("finished: " + arg);
     ready();
   });
 

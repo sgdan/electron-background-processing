@@ -8,32 +8,27 @@
       content="script-src 'self' 'unsafe-inline';"
     />
     <script type="text/javascript">
-      const { ipcRenderer } = require("electron");
-
       function setVal(id, value) {
         document.getElementById(id).innerHTML = value;
       }
 
       function toMain() {
-        ipcRenderer.send("to-main", document.getElementById("msg").value);
+        window.api.toMain(document.getElementById("msg").value);
       }
 
       function toBg() {
-        ipcRenderer.send(
-          "for-background",
-          document.getElementById("msg").value
-        );
+        window.api.forBackground(document.getElementById("msg").value);
       }
 
       function assignTask() {
-        ipcRenderer.send("assign-task", document.getElementById("task").value);
+        window.api.assignTask(document.getElementById("task").value);
       }
 
-      ipcRenderer.on("to-renderer", (event, arg) => {
-        setVal("received", arg);
+      window.api.toRenderer((data) => {
+        setVal("received", data);
       });
 
-      ipcRenderer.on("status", (event, threads, tasks) => {
+      window.api.status((threads, tasks) => {
         setVal("threads", threads);
         setVal("tasks", tasks);
       });
