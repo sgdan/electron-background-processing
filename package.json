@@ -1,10 +1,10 @@
 {
   "name": "electron-background-processing",
   "main": "main.js",
-  "dependencies": {
-    "electron": "^18.3.7"
-  },
   "scripts": {
     "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^21.2.3"
   }
 }
